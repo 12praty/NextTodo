@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";//Imports your Prisma client to communicat
 import { loginSchema } from "@/lib/schemas";//Imports your Zod validation schema to check login data before using it.
 import { use } from "react";
 import { Session } from "inspector/promises";
+import { User } from "lucide-react";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(prisma),
@@ -39,7 +40,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     callbacks: {
         // Add user.id to the JWT token (not there by default)
         async jwt({ token, user }{
-            if(user)token.id = User.id;
+            if(user){
+    token.id = User.id;
+    token.role = user.role;  // Add any custom field
     return token
 })
         // Expose token.id on session.user so components can access it
