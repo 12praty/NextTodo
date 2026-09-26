@@ -65,3 +65,25 @@ model Task {
 
   @@index([userId])
 }
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // null for OAuth users
+  accounts      Account[]
+  sessions      Session[]
+  todos         Todo[]
+  createdAt     DateTime  @default(now())
+}
+
+model Todo {
+  id        String   @id @default(cuid())
+  title     String
+  done      Boolean  @default(false)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
